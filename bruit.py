@@ -2,7 +2,7 @@ import math
 from PIL import Image
 import random
 import numpy as np
-image=Image.open('poivron_correct.png')
+image=Image.open('image1_bruitee_snr_9.2885.png')
 
 image=image.convert('L') 
 valeurImage=np.asarray(image)
@@ -84,7 +84,6 @@ def Debruitage_Median_poivre_et_sel(longueur,hauteur):
                     valeurPixel[i][j]=c
     return valeurPixel
 
-
 def Debruitage_Median_Couleur(longueur,hauteur):
     valeurPixel=np.asarray(image)
     for i in range(hauteur):
@@ -107,7 +106,6 @@ def Debruitage_Median_Couleur(longueur,hauteur):
                     c=np.median(sorted(valMoy))
                     valeurPixel[i][j]=c
     return valeurPixel
-
 def Debruitage_Convolution(longueur,hauteur):
     valeurPixel=np.asarray(image)
 
@@ -137,11 +135,11 @@ def debruitage_Median(longueur,hauteur):
 def Calcul_Snr(valeurImage,l,h):
     c=int(input(" 1 pour un bruitage poivre et sel \n 2 pour un bruitage additif \n 3 pour un bruitage multiplicatif \n 4 pour le debug \n "))
     if (c==1):
-        valeurImageBruitée=nbPoivreEtSel(l,h)
+        valeurImageBruitée = Bruitage_poivre_et_sel(l,h)
     if (c==2):
-        valeurImageBruitée =bruitageGaussAdditf(l,h)
+        valeurImageBruitée = BruitageGaussAdditf(l,h)
     if (c==3):
-       valeurImageBruitée= bruitageGaussMulti(l,h)
+       valeurImageBruitée = BruitageGaussMulti(l,h)
     if (c==4):
         image.close()
         image2=Image.open('image1_bruitee_snr_41.8939.png')
@@ -154,19 +152,16 @@ def Calcul_Snr(valeurImage,l,h):
             v1+=np.float64(vtmp)
             vtmp=valeurImageBruitée[i,j]**2
             v2+=np.float64(vtmp)
-
+    
     print("v1 = ",v1)
     print("v2 = ",v2)
-    print("V1-v2 = ",v1 - v2)
-   
-    snr = np.float64(10*np.log10(v1/abs(v1-v2)))
-    print("Le SNR est :",snr)
+    print("V1-v2 = ",v1 - v2)  
 
 l,h = image.size
 while True :
     c=input(" 1 = Bruitage poivre et sel \n 2 = Bruitage additif \n 3 = Bruitage multiplicatif \n 4 = Debruitage Median \n 5 pour calculer le SNR\n 6 pour quitter \n")
     if (c=='1') :
-       Bruitage_couleur_poivre_et_sel(l,h)
+       couleurPoivreEtSel(l,h)
        image.show()
     elif (c=='2'):
         image= Image.fromarray(BruitageGaussAdditf(l,h))
