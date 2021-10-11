@@ -23,6 +23,7 @@ def BruitageGaussAdditf(longueur,hauteur):
                 valeurPixel[i][j]=v
             c+=1
     return valeurPixel
+
 def BruitageGaussMulti(longueur,hauteur):
     c=0
     n=np.array(np.random.normal(0,1,hauteur*longueur))
@@ -41,7 +42,8 @@ def BruitageGaussMulti(longueur,hauteur):
                 valeurPixel[i][j]=v
             c+=1
     return valeurPixel
-# def Bruitage_couleur_poivre_et_sel(longueur,hauteur):
+
+def Bruitage_couleur_poivre_et_sel(longueur,hauteur):
     for i in range (longueur):
         for j in range(hauteur): 
             if random.randint(0,5) ==5 :
@@ -49,6 +51,7 @@ def BruitageGaussMulti(longueur,hauteur):
                     image.putpixel((i,j),(255,255,255))
                 else :
                     image.putpixel((i,j),(0,0,0))
+
 def Bruitage_poivre_et_sel(longueur,hauteur):
      for i in range (longueur):
         for j in range(hauteur):  
@@ -57,6 +60,7 @@ def Bruitage_poivre_et_sel(longueur,hauteur):
                     image.putpixel((i,j),(255))
                 else :
                     image.putpixel((i,j),(0))
+
 def Debruitage_Median_poivre_et_sel(longueur,hauteur):
     valeurPixel=np.asarray(image)
     for i in range(hauteur):
@@ -79,7 +83,8 @@ def Debruitage_Median_poivre_et_sel(longueur,hauteur):
                     c=np.median(sorted(valMoy))
                     valeurPixel[i][j]=c
     return valeurPixel
-# def Debruitage_Median_Couleur(longueur,hauteur):
+
+def Debruitage_Median_Couleur(longueur,hauteur):
     valeurPixel=np.asarray(image)
     for i in range(hauteur):
         for j in range(longueur):
@@ -124,7 +129,7 @@ def Calcul_Snr(valeurImage,l,h):
             v1+=np.float64(vtmp)
             vtmp=valeurImageBruitée[i,j]**2
             v2+=np.float64(vtmp)
-
+    print("p")
     print("v1 = ",v1)
     print("v2 = ",v2)
     print("V1-v2 = ",v1 - v2)  
@@ -148,8 +153,3 @@ while True :
         Calcul_Snr(valeurImage,l,h)
     elif(c=='6'):
         break
-# image.save('buitcouleur.png')
-# image= Image.fromarray(bruitageGaussAdditf(l,h))
-# image.show()
-# image= Image.fromarray(bruitageGaussMulti(l,h))
-# image.show()
