@@ -104,19 +104,50 @@ def Debruitage_Median_poivre_et_sel(longueur,hauteur):
 def Debruitage_Convolution(longueur,hauteur):
     valeurPixel=np.asarray(image)
 
-def Calcul_Snr(valeurImage,valeurImageBruitée):
-    v1=np.sum(valeurImage)
-    v2 =np.sum(valeurImage)-np.sum(valeurImageBruitée)
-    v2=abs(v2)
-    print(v2)
-    SNR=10*math.log10(v1**2/v2**2)
-    print("Le SNR est :",SNR)  
+def Calcul_Snr(valeurImage,l,h):
+    c=int(input(" 1 pour un bruitage poivre et sel \n 2 pour un bruitage additif \n 3 pour un bruitage multiplicatif \n 4 pour le debug \n "))
+    if (c==1):
+        valeurImageBruitée=Bruitage_poivre_et_sel(l,h)
+    if (c==2):
+        valeurImageBruitée =BruitageGaussAdditf(l,h)
+    if (c==3):
+       valeurImageBruitée= BruitageGaussMulti(l,h)
+    if (c==4):
+        image.close()
+        image2=Image.open('image1_bruitee_snr_41.8939.png')
+        valeurImageBruitée=np.asarray(image2)
+    v1,v2=0,0
+
+    for i in range(h):
+        for j in range (l):
+            vtmp=valeurImage[i,j]**2
+            v1+=np.float64(vtmp)
+            vtmp=valeurImageBruitée[i,j]**2
+            v2+=np.float64(vtmp)
+
+    print("v1 = ",v1)
+    print("v2 = ",v2)
+    print("V1-v2 = ",v1 - v2)  
 
 l,h = image.size
-image= Image.fromarray(Debruitage_Median_poivre_et_sel(l,h))
-image.show()
-valeurImageBruitée=np.asarray(image)
-print(Calcul_Snr(valeurImage,valeurImageBruitée))
+while True :
+    c=input(" 1 = Bruitage poivre et sel \n 2 = Bruitage additif \n 3 = Bruitage multiplicatif \n 4 = Debruitage Median \n 5 pour calculer le SNR\n 6 pour quitter \n")
+    if (c=='1') :
+       couleurPoivreEtSel(l,h)
+       image.show()
+    elif (c=='2'):
+        image= Image.fromarray(BruitageGaussAdditf(l,h))
+        image.show()
+    elif(c=='3'):
+        image= Image.fromarray(BruitageGaussMulti(l,h))
+        image.show()
+    elif (c=='4'):
+        image=Image.fromarray( DebruitageMedian(l,h))
+        image.show()
+    elif(c=='5'):
+        Calcul_Snr(valeurImage,l,h)
+    elif(c=='6'):
+        break
 # image.save('buitcouleur.png')
 # image= Image.fromarray(bruitageGaussAdditf(l,h))
 # image.show()
