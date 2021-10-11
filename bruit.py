@@ -129,7 +129,6 @@ def Calcul_Snr(valeurImage,l,h):
             v1+=np.float64(vtmp)
             vtmp=valeurImageBruitée[i,j]**2
             v2+=np.float64(vtmp)
-    print("p")
     print("v1 = ",v1)
     print("v2 = ",v2)
     print("V1-v2 = ",v1 - v2)  
@@ -138,7 +137,7 @@ l,h = image.size
 while True :
     c=input(" 1 = Bruitage poivre et sel \n 2 = Bruitage additif \n 3 = Bruitage multiplicatif \n 4 = Debruitage Median \n 5 pour calculer le SNR\n 6 pour quitter \n")
     if (c=='1') :
-       couleurPoivreEtSel(l,h)
+       Bruitage_couleur_poivre_et_sel(l,h)
        image.show()
     elif (c=='2'):
         image= Image.fromarray(BruitageGaussAdditf(l,h))
@@ -147,7 +146,7 @@ while True :
         image= Image.fromarray(BruitageGaussMulti(l,h))
         image.show()
     elif (c=='4'):
-        image=Image.fromarray( DebruitageMedian(l,h))
+        image=Image.fromarray(DebruitageMedian(l,h))
         image.show()
     elif(c=='5'):
         Calcul_Snr(valeurImage,l,h)
