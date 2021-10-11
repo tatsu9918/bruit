@@ -23,7 +23,6 @@ def BruitageGaussAdditf(longueur,hauteur):
                 valeurPixel[i][j]=v
             c+=1
     return valeurPixel
-
 def BruitageGaussMulti(longueur,hauteur):
     c=0
     n=np.array(np.random.normal(0,1,hauteur*longueur))
@@ -42,7 +41,6 @@ def BruitageGaussMulti(longueur,hauteur):
                 valeurPixel[i][j]=v
             c+=1
     return valeurPixel
-
 def Bruitage_couleur_poivre_et_sel(longueur,hauteur):
     for i in range (longueur):
         for j in range(hauteur): 
@@ -51,7 +49,6 @@ def Bruitage_couleur_poivre_et_sel(longueur,hauteur):
                     image.putpixel((i,j),(255,255,255))
                 else :
                     image.putpixel((i,j),(0,0,0))
-
 def Bruitage_poivre_et_sel(longueur,hauteur):
      for i in range (longueur):
         for j in range(hauteur):  
@@ -60,12 +57,10 @@ def Bruitage_poivre_et_sel(longueur,hauteur):
                     image.putpixel((i,j),(255))
                 else :
                     image.putpixel((i,j),(0))
-
-def Debruitage_Median_poivre_et_sel(longueur,hauteur):
+def Debruitage_Median(longueur,hauteur):
     valeurPixel=np.asarray(image)
     for i in range(hauteur):
         for j in range(longueur):
-            if valeurPixel[i][j]== 0 or valeurPixel[i][j]==255:
                 if i==(hauteur-1)and j!=(longueur-1):
                     valMoy=[valeurPixel[i][j-1],valeurPixel[i][j+1],valeurPixel[i-1][j],valeurPixel[i-1][j-1],valeurPixel[i-1][j+1]]
                     c=np.median(sorted(valMoy))
@@ -83,7 +78,6 @@ def Debruitage_Median_poivre_et_sel(longueur,hauteur):
                     c=np.median(sorted(valMoy))
                     valeurPixel[i][j]=c
     return valeurPixel
-
 def Debruitage_Median_Couleur(longueur,hauteur):
     valeurPixel=np.asarray(image)
     for i in range(hauteur):
@@ -106,14 +100,11 @@ def Debruitage_Median_Couleur(longueur,hauteur):
                     c=np.median(sorted(valMoy))
                     valeurPixel[i][j]=c
     return valeurPixel
-def Debruitage_Convolution(longueur,hauteur):
-    valeurPixel=np.asarray(image)
-
-
-def debruitage_Median(longueur,hauteur):
+def Debruitage_Median_poivre_et_sel(longueur,hauteur):
     valeurPixel=np.asarray(image)
     for i in range(hauteur):
         for j in range(longueur):
+            if valeurPixel[i][j]== 0 or valeurPixel[i][j]==255:
                 if i==(hauteur-1)and j!=(longueur-1):
                     valMoy=[valeurPixel[i][j-1],valeurPixel[i][j+1],valeurPixel[i-1][j],valeurPixel[i-1][j-1],valeurPixel[i-1][j+1]]
                     c=np.median(sorted(valMoy))
@@ -131,7 +122,8 @@ def debruitage_Median(longueur,hauteur):
                     c=np.median(sorted(valMoy))
                     valeurPixel[i][j]=c
     return valeurPixel
-
+def Debruitage_Convolution(longueur,hauteur):
+    valeurPixel=np.asarray(image)
 def Calcul_Snr(valeurImage,l,h):
     c=int(input(" 1 pour un bruitage poivre et sel \n 2 pour un bruitage additif \n 3 pour un bruitage multiplicatif \n 4 pour le debug \n "))
     if (c==1):
@@ -161,7 +153,7 @@ l,h = image.size
 while True :
     c=input(" 1 = Bruitage poivre et sel \n 2 = Bruitage additif \n 3 = Bruitage multiplicatif \n 4 = Debruitage Median \n 5 pour calculer le SNR\n 6 pour quitter \n")
     if (c=='1') :
-       couleurPoivreEtSel(l,h)
+       Bruitage_couleur_poivre_et_sel(l,h)
        image.show()
     elif (c=='2'):
         image= Image.fromarray(BruitageGaussAdditf(l,h))
@@ -170,7 +162,7 @@ while True :
         image= Image.fromarray(BruitageGaussMulti(l,h))
         image.show()
     elif (c=='4'):
-        image=Image.fromarray( debruitage_Median(l,h))
+        image=Image.fromarray(Debruitage_Median(l,h))
         image.show()
     elif(c=='5'):
         Calcul_Snr(valeurImage,l,h)
