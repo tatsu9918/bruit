@@ -3,11 +3,8 @@ from PIL import Image
 import random
 import numpy as np
 image=Image.open('image1_bruitee_snr_13.0913.png')
-imagesnr=Image.open('image1_bruitee_snr_13.0913.png')
 image=image.convert('L') 
 valeurImage=np.asarray(image)
-valeurImageSnr=np.asarray(imagesnr)
-sigma=0.5
 
 
 def BruitageGaussAdditf(longueur,hauteur):
@@ -35,7 +32,6 @@ def BruitageGaussMulti(longueur,hauteur):
         for j in range (hauteur-1):
             
             v=(n[c]+1)*valeurPixel[i][j]
-            print(v)
             
             if v>255 :
                 valeurPixel[i][j]=255
@@ -125,12 +121,14 @@ def debruitage_Median(longueur,hauteur):
                     valeurPixel[i][j]=c
     return valeurPixel
 
-def calcul_Snr(valeurImageSnr,valeurImageBruitée,l,h):
+def calcul_Snr(valeurImageBruitée,l,h):
     pSignal,pBruit=0,0
+    imagesnr=Image.open('img2.png')
+    valeurImageSnr=np.asarray(imagesnr)
     for i in range(h):
         for j in range (l):
             pSignal+=float(valeurImageBruitée[i][j]**2)
-            pBruittmp=float(valeurImageBruitée[i][j])-float(valeurImage[i][j])
+            pBruittmp=float(valeurImageBruitée[i][j])-float(valeurImageSnr[i][j])
             pBruit+=float(pBruittmp**2)
 
     print("pSignal = ",pSignal)
@@ -138,33 +136,28 @@ def calcul_Snr(valeurImageSnr,valeurImageBruitée,l,h):
     print("pSignal-pBruit = ",pSignal - pBruit)
     snr = float(10*np.log10(pSignal/abs(pBruit)))
     print("Le SNR est :",snr)
-
+    imagesnr.close()
 l,h = image.size
-gauss=(1/(2*(np.pi)*sigma**2))*np.exp(-((3-1)**2)/2*(sigma**2))
-
-print(gauss*2)
-
 
 while True :
-    c=input(" 1 = Bruitage poivre et sel \n 2 = Bruitage additif \n 3 = Bruitage multiplicatif \n 4 = Debruitage Median \n 5 pour le debruitage par convolution \n 6 pour quitter \n 7 calcul du snr \n ")
+    c=input(" 1 = Bruitage poivre et sel \n 2 = Bruitage additif \n 3 = Bruitage multiplicatif \n 4 = Debruitage median \n 5 Debruitage convolution \n 6 Quitter \n 7 Calcul du snr \n ")
     if (c=='1') :
         valeurImageBruitée = Bruitage_poivre_et_sel(l,h)
         image= Image.fromarray(valeurImageBruitée)
         image.show()
         c=input("Voulez vous calculer le snr de cette image : 1 oui 2 non\n")
         if c=="1" :
-            calcul_Snr(valeurImage,valeurImageBruitée,l,h)
+            calcul_Snr(valeurImageBruitée,l,h)
         else :
             c="null"
 
     elif (c=='2'):
-        
         valeurImageBruitée = BruitageGaussAdditf(l,h)
         image= Image.fromarray(valeurImageBruitée)
         image.show()
         c=input("Voulez vous calculer le snr de cette image : 1 oui 2 non\n")
         if c=="1" :
-            calcul_Snr(valeurImage,valeurImageBruitée,l,h)
+            calcul_Snr(valeurImageBruitée,l,h)
         else :
             c="null"
 
@@ -174,7 +167,7 @@ while True :
         image.show()
         c=input("Voulez vous calculer le snr de cette image : 1 oui 2 non\n")
         if c=="1" :
-            calcul_Snr(valeurImage,valeurImageBruitée,l,h)
+            calcul_Snr(valeurImageBruitée,l,h)
         else :
             c="null"
 
@@ -184,7 +177,7 @@ while True :
         image.show()
         c=input("Voulez vous calculer le snr de cette image : 1 oui 2 non\n")
         if c=="1" :
-            calcul_Snr(valeurImage,valeurImageBruitée,l,h)
+            calcul_Snr(valeurImageBruitée,l,h)
         else :
             c="null"
 
@@ -194,7 +187,7 @@ while True :
         image.show()
         c=input("Voulez vous calculer le snr de cette image : 1 oui 2 non\n")
         if c=="1" :
-            calcul_Snr(valeurImage,valeurImageBruitée,l,h)
+            calcul_Snr(valeurImageBruitée,l,h)
         else :
             c="null"
 
@@ -205,4 +198,4 @@ while True :
         image.close()
         image2=Image.open('image2_bruitee_sigma65.tiff')
         valeurImageBruitée=np.asarray(image2)
-        calcul_Snr(valeurImage,valeurImageBruitée,l,h)
+        calcul_Snr(valeurImageBruitée,l,h)
