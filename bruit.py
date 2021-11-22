@@ -62,42 +62,19 @@ def Debruitage_Median_poivre_et_sel(longueur,hauteur):
     for i in range(hauteur):
         for j in range(longueur):
             if valeurPixel[i][j]== 0 or valeurPixel[i][j]==255:
-                if i==(hauteur-1)and j!=(longueur-1):
+                if i==(hauteur-1)and j!=(longueur-1): # ligne de droite
                     valMoy=[valeurPixel[i][j-1],valeurPixel[i][j+1],valeurPixel[i-1][j],valeurPixel[i-1][j-1],valeurPixel[i-1][j+1]]
                     c=np.median(sorted(valMoy))
                     valeurPixel[i][j]=c
-                if i==(hauteur-1) and j==(longueur-1):
+                if i==(hauteur-1) and j==(longueur-1): # coin en bas à droite
                     valMoy=[valeurPixel[i-1][j],valeurPixel[i][j-1],valeurPixel[i-1][j-1]]
                     c=np.median(sorted(valMoy))
                     valeurPixel[i][j]=c
-                if j==(longueur-1)and i!=(hauteur-1):
+                if j==(longueur-1)and i!=(hauteur-1): # colonne de droite
                     valMoy=[valeurPixel[i-1][j],valeurPixel[i+1][j],valeurPixel[i][j-1],valeurPixel[i-1][j-1],valeurPixel[i+1][j-1]]
                     c=np.median(sorted(valMoy))
                     valeurPixel[i][j]=c
-                if i!=(hauteur-1) and j!=(longueur-1):
-                    valMoy=[valeurPixel[i-1][j+1],valeurPixel[i+1][j-1],valeurPixel[i+1][j],valeurPixel[i][j+1],valeurPixel[i][j-1],valeurPixel[i-1][j],valeurPixel[i-1][j-1],valeurPixel[i+1][j+1]]
-                    c=np.median(sorted(valMoy))
-                    valeurPixel[i][j]=c
-    return valeurPixel
-
-def Debruitage_Median_Couleur(longueur,hauteur):
-    valeurPixel=np.asarray(image)
-    for i in range(hauteur):
-        for j in range(longueur):
-            if valeurPixel[i][j]== (0,0,0) or valeurPixel[i][j]==(255,255,255):
-                if i==(hauteur-1)and j!=(longueur-1):
-                    valMoy=[valeurPixel[i][j-1],valeurPixel[i][j+1],valeurPixel[i-1][j],valeurPixel[i-1][j-1],valeurPixel[i-1][j+1]]
-                    c=np.median(sorted(valMoy))
-                    valeurPixel[i][j]=c
-                if i==(hauteur-1) and j==(longueur-1):
-                    valMoy=[valeurPixel[i-1][j],valeurPixel[i][j-1],valeurPixel[i-1][j-1]]
-                    c=np.median(sorted(valMoy))
-                    valeurPixel[i][j]=c
-                if j==(longueur-1)and i!=(hauteur-1):
-                    valMoy=[valeurPixel[i-1][j],valeurPixel[i+1][j],valeurPixel[i][j-1],valeurPixel[i-1][j-1],valeurPixel[i+1][j-1]]
-                    c=np.median(sorted(valMoy))
-                    valeurPixel[i][j]=c
-                if i!=(hauteur-1) and j!=(longueur-1):
+                if i!=(hauteur-1) and j!=(longueur-1): #traitement du reste des pixels
                     valMoy=[valeurPixel[i-1][j+1],valeurPixel[i+1][j-1],valeurPixel[i+1][j],valeurPixel[i][j+1],valeurPixel[i][j-1],valeurPixel[i-1][j],valeurPixel[i-1][j-1],valeurPixel[i+1][j+1]]
                     c=np.median(sorted(valMoy))
                     valeurPixel[i][j]=c
@@ -111,13 +88,19 @@ def Debruitage_Convolution(longueur,hauteur):
     sigma=0.8
     #kernel = np.zeros((3,3),float)+(1/(2*(np.pi)*sigma**2))*np.exp(-((3-1)**2)/2*(sigma**2))
     #print(kernel)
-    for i in range(hauteur-1) :
-        for j in range (longueur-1):
-
-            valeurPixel[i][j]=kernel[0][0]*valeurPixel[i+1][j+1] +kernel[1][0]*valeurPixel[i][j+1] +kernel[2][0]*valeurPixel[i-1][j+1] +kernel[0][1]*valeurPixel[i+1][j] +kernel[1][1]*valeurPixel[i][j] +kernel[2][1]*valeurPixel[i-1][j] +kernel[0][2]*valeurPixel[i+1][j-1] +kernel[1][2]*valeurPixel[i][j-1] +kernel[2][2]*valeurPixel[i-1][j-1] 
-            
-      
-    
+    for i in range(hauteur):
+            for j in range(longueur):
+                if valeurPixel[i][j]== 0 or valeurPixel[i][j]==255:
+                    if i==(hauteur-2)and j!=(longueur-2): # ligne de droite
+                        c=valeurPixel[i][j]=kernel[0][0]*valeurPixel[i+1][j+1] +kernel[1][0]*valeurPixel[i][j+1] +kernel[0][1]*valeurPixel[i+1][j] +kernel[1][1]*valeurPixel[i][j] +kernel[0][2]*valeurPixel[i+1][j-1] +kernel[1][2]*valeurPixel[i][j-1]
+                    if i==(hauteur-1) and j==(longueur-1): # coint en bas à droite
+                        c=valeurPixel[i][j]=kernel[0][0]*valeurPixel[i+1][j+1] +kernel[1][0]*valeurPixel[i][j+1] +kernel[0][1]*valeurPixel[i+1][j] +kernel[1][1]*valeurPixel[i][j] 
+                        valeurPixel[i][j]=c
+                    if j==(longueur-2)and i!=(hauteur-2): # colonne de droite
+                        c=valeurPixel[i][j]=kernel[0][0]*valeurPixel[i+1][j+1] +kernel[1][0]*valeurPixel[i][j+1] +kernel[2][0]*valeurPixel[i-1][j+1] +kernel[0][1]*valeurPixel[i+1][j] +kernel[1][1]*valeurPixel[i][j] +kernel[2][1]*valeurPixel[i-1][j] 
+                    if i!=(hauteur-1) and j!=(longueur-1): #traitement du reste des pixels
+                        c=valeurPixel[i][j]=kernel[0][0]*valeurPixel[i+1][j+1] +kernel[1][0]*valeurPixel[i][j+1] +kernel[2][0]*valeurPixel[i-1][j+1] +kernel[0][1]*valeurPixel[i+1][j] +kernel[1][1]*valeurPixel[i][j] +kernel[2][1]*valeurPixel[i-1][j] +kernel[0][2]*valeurPixel[i+1][j-1] +kernel[1][2]*valeurPixel[i][j-1] +kernel[2][2]*valeurPixel[i-1][j-1]
+                        valeurPixel[i][j]=c
     return valeurPixel
 
 def debruitage_Median(longueur,hauteur):
@@ -163,7 +146,7 @@ print(gauss*2)
 
 
 while True :
-    c=input(" 1 = Bruitage poivre et sel \n 2 = Bruitage additif \n 3 = Bruitage multiplicatif \n 4 = Debruitage Median \n 5 pour le debruitage par concolution \n 6 pour quitter \n 7 pour le test et le debug snr \n ")
+    c=input(" 1 = Bruitage poivre et sel \n 2 = Bruitage additif \n 3 = Bruitage multiplicatif \n 4 = Debruitage Median \n 5 pour le debruitage par convolution \n 6 pour quitter \n 7 calcul du snr \n ")
     if (c=='1') :
         valeurImageBruitée = Bruitage_poivre_et_sel(l,h)
         image= Image.fromarray(valeurImageBruitée)
@@ -223,6 +206,3 @@ while True :
         image2=Image.open('image2_bruitee_sigma65.tiff')
         valeurImageBruitée=np.asarray(image2)
         calcul_Snr(valeurImage,valeurImageBruitée,l,h)
-
-   
-
