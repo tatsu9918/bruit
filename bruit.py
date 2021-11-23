@@ -2,8 +2,8 @@ import math
 from PIL import Image
 import random
 import numpy as np
-image=Image.open('poivron_correct.png')
-imagesnr=Image.open('poivron_correct.png')
+image=Image.open('guts.png')
+imagesnr=Image.open('guts.png')
 image=image.convert('L') 
 valeurImage=np.asarray(image)
 valeurImageSnr=np.asarray(imagesnr)
@@ -49,7 +49,7 @@ def Bruitage_poivre_et_sel(longueur,hauteur):
      valeurPixel=np.asarray(image)
      for i in range (hauteur):
         for j in range(longueur):  
-            if random.randint(0,100) <=5 :
+            if random.randint(0,100) <=50 :
                 if random.randint(0,1)==1:
                     valeurPixel[i][j]=255
                 else :
@@ -143,7 +143,7 @@ l,h = image.size
 
 
 while True :
-    c=input(" 1 = Bruitage poivre et sel \n 2 = Bruitage additif \n 3 = Bruitage multiplicatif \n 4 = Debruitage median \n 5 = Debruitage median poivre et sel\n 6 = Debruitage convolution \n 7 = Quitter \n 8 Calcul du snr \n ")
+    c=input(" 1 = Bruitage poivre et sel \n 2 = Bruitage additif \n 3 = Bruitage multiplicatif \n 4 = Debruitage median \n 5 = Debruitage median poivre et sel\n 6 = Debruitage convolution \n 7 = Quitter \n 8 = Calcul du snr \n ")
     if (c=='1') :
         valeurImageBruitée = Bruitage_poivre_et_sel(l,h)
         image= Image.fromarray(valeurImageBruitée)
@@ -210,7 +210,7 @@ while True :
 
     elif (c=="8"):
         image.close()
-        image2=Image.open('image1_bruitee_snr_9.2885.png')
+        image2=Image.open('guts.png')
         valeurImageBruitée=np.asarray(image2)
         calcul_Snr(valeurImageSnr,valeurImageBruitée,l,h)
 
