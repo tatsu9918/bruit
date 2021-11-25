@@ -143,7 +143,7 @@ l,h = image.size
 
 
 while True :
-    c=input(" 1 = Bruitage poivre et sel \n 2 = Bruitage additif \n 3 = Bruitage multiplicatif \n 4 = Debruitage median \n 5 = Debruitage median poivre et sel\n 6 = Debruitage convolution \n 7 = Quitter \n 8 = Calcul du snr \n ")
+    c=input(" 1 = Bruitage poivre et sel \n 2 = Bruitage additif \n 3 = Bruitage multiplicatif \n 4 = Debruitage median \n 5 = Debruitage median poivre et sel\n 6 = Debruitage convolution \n 7 = Quitter \n 8 = Calcul du snr \n 9 = Full test\n")
     if (c=='1') :
         valeurImageBruitée = Bruitage_poivre_et_sel(l,h)
         image= Image.fromarray(valeurImageBruitée)
@@ -214,5 +214,14 @@ while True :
         valeurImageBruitée=np.asarray(image2)
         calcul_Snr(valeurImageSnr,valeurImageBruitée,l,h)
 
+    elif(c=="9"):
+            c=input("quel est le bruitage souhaité : \n 1 = Poivre et sel \n 2 = Additif \n 3 = Muliplicatif\n")
+            valeurImageBruitée = Bruitage_poivre_et_sel(l,h)
+            calcul_Snr(valeurImageSnr,valeurImageBruitée,l,h)
+            image= Image.fromarray(valeurImageBruitée)
+            valeurImageBruitée=Debruitage_Convolution(l,h)
+            calcul_Snr(valeurImageSnr,valeurImageBruitée,l,h)
+            
+    
    
 
