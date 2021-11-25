@@ -2,8 +2,8 @@ import math
 from PIL import Image
 import random
 import numpy as np
-image=Image.open('guts.png')
-imagesnr=Image.open('guts.png')
+image=Image.open('poivron_correct.png')
+imagesnr=Image.open('poivron_correct.png')
 image=image.convert('L') 
 valeurImage=np.asarray(image)
 valeurImageSnr=np.asarray(imagesnr)
@@ -49,7 +49,7 @@ def Bruitage_poivre_et_sel(longueur,hauteur):
      valeurPixel=np.asarray(image)
      for i in range (hauteur):
         for j in range(longueur):  
-            if random.randint(0,100) <=50 :
+            if random.randint(0,100) <=5 :
                 if random.randint(0,1)==1:
                     valeurPixel[i][j]=255
                 else :
@@ -88,19 +88,18 @@ def Debruitage_Convolution(longueur,hauteur):
     #sigma=0.8
     #kernel = np.zeros((3,3),float)+(1/(2*(np.pi)*sigma**2))*np.exp(-((3-1)**2)/2*(sigma**2))
     #print(kernel)
-    for i in range(hauteur):
-        for j in range(longueur):
-            if valeurPixel[i][j]== 0 or valeurPixel[i][j]==255:
-                if i==(hauteur-2)and j!=(longueur-2): # ligne de droite
-                    c=valeurPixel[i][j]=kernel[0][0]*valeurPixel[i+1][j+1] +kernel[1][0]*valeurPixel[i][j+1] +kernel[0][1]*valeurPixel[i+1][j] +kernel[1][1]*valeurPixel[i][j] +kernel[0][2]*valeurPixel[i+1][j-1] +kernel[1][2]*valeurPixel[i][j-1]
-                if i==(hauteur-1) and j==(longueur-1): # coint en bas à droite
-                    c=valeurPixel[i][j]=kernel[0][0]*valeurPixel[i+1][j+1] +kernel[1][0]*valeurPixel[i][j+1] +kernel[0][1]*valeurPixel[i+1][j] +kernel[1][1]*valeurPixel[i][j] 
-                    valeurPixel[i][j]=c
-                if j==(longueur-2)and i!=(hauteur-2): # colonne de droite
-                    c=valeurPixel[i][j]=kernel[0][0]*valeurPixel[i+1][j+1] +kernel[1][0]*valeurPixel[i][j+1] +kernel[2][0]*valeurPixel[i-1][j+1] +kernel[0][1]*valeurPixel[i+1][j] +kernel[1][1]*valeurPixel[i][j] +kernel[2][1]*valeurPixel[i-1][j] 
-                if i!=(hauteur-1) and j!=(longueur-1): #traitement du reste des pixels
-                    c=valeurPixel[i][j]=kernel[0][0]*valeurPixel[i+1][j+1] +kernel[1][0]*valeurPixel[i][j+1] +kernel[2][0]*valeurPixel[i-1][j+1] +kernel[0][1]*valeurPixel[i+1][j] +kernel[1][1]*valeurPixel[i][j] +kernel[2][1]*valeurPixel[i-1][j] +kernel[0][2]*valeurPixel[i+1][j-1] +kernel[1][2]*valeurPixel[i][j-1] +kernel[2][2]*valeurPixel[i-1][j-1]
-                    valeurPixel[i][j]=c
+    for i in range(hauteur-1):
+        for j in range(longueur-1):
+            if i==(hauteur)and j!=(longueur): # ligne de droite
+                c=valeurPixel[i][j]=kernel[0][0]*valeurPixel[i+1][j+1] +kernel[1][0]*valeurPixel[i][j+1] +kernel[0][1]*valeurPixel[i+1][j] +kernel[1][1]*valeurPixel[i][j] +kernel[0][2]*valeurPixel[i+1][j-1] +kernel[1][2]*valeurPixel[i][j-1]
+            if i==(hauteur) and j==(longueur): # coint en bas à droite
+                c=valeurPixel[i][j]=kernel[0][0]*valeurPixel[i+1][j+1] +kernel[1][0]*valeurPixel[i][j+1] +kernel[0][1]*valeurPixel[i+1][j] +kernel[1][1]*valeurPixel[i][j] 
+                valeurPixel[i][j]=c
+            if j==(longueur)and i!=(hauteur): # colonne de droite
+                c=valeurPixel[i][j]=kernel[0][0]*valeurPixel[i+1][j+1] +kernel[1][0]*valeurPixel[i][j+1] +kernel[2][0]*valeurPixel[i-1][j+1] +kernel[0][1]*valeurPixel[i+1][j] +kernel[1][1]*valeurPixel[i][j] +kernel[2][1]*valeurPixel[i-1][j] 
+            if i!=(hauteur) and j!=(longueur): #traitement du reste des pixels
+                c=valeurPixel[i][j]=kernel[0][0]*valeurPixel[i+1][j+1] +kernel[1][0]*valeurPixel[i][j+1] +kernel[2][0]*valeurPixel[i-1][j+1] +kernel[0][1]*valeurPixel[i+1][j] +kernel[1][1]*valeurPixel[i][j] +kernel[2][1]*valeurPixel[i-1][j] +kernel[0][2]*valeurPixel[i+1][j-1] +kernel[1][2]*valeurPixel[i][j-1] +kernel[2][2]*valeurPixel[i-1][j-1]
+                valeurPixel[i][j]=c
     return valeurPixel
 
 def debruitage_Median(longueur,hauteur):
@@ -210,18 +209,49 @@ while True :
 
     elif (c=="8"):
         image.close()
-        image2=Image.open('guts.png')
+        image2=Image.open('image1_bruitee_snr_9.2885.png')
         valeurImageBruitée=np.asarray(image2)
         calcul_Snr(valeurImageSnr,valeurImageBruitée,l,h)
 
-    elif(c=="9"):
-            c=input("quel est le bruitage souhaité : \n 1 = Poivre et sel \n 2 = Additif \n 3 = Muliplicatif\n")
-            valeurImageBruitée = Bruitage_poivre_et_sel(l,h)
-            calcul_Snr(valeurImageSnr,valeurImageBruitée,l,h)
-            image= Image.fromarray(valeurImageBruitée)
-            valeurImageBruitée=Debruitage_Convolution(l,h)
-            calcul_Snr(valeurImageSnr,valeurImageBruitée,l,h)
-            
-    
    
 
+
+
+    elif(c=="9"):
+            c=input("quel est le bruitage souhaité : \n 1 = Poivre et sel \n 2 = Additif \n 3 = Muliplicatif\n")
+            if c=="1" :   
+                valeurImageBruitée = Bruitage_poivre_et_sel(l,h)
+                print("snr image bruitée")
+                print(calcul_Snr(valeurImageSnr,valeurImageBruitée,l,h))
+                image= Image.fromarray(valeurImageBruitée)
+                image.show()
+                valeurImageBruitée=Debruitage_Convolution(l,h)
+                print("snr après convolution")
+                print(calcul_Snr(valeurImageSnr,valeurImageBruitée,l,h))
+                valeurImageBruitée=debruitage_Median(l,h)
+                print("snr après médian")
+                print(calcul_Snr(valeurImageSnr,valeurImageBruitée,l,h))
+            elif c=="2":
+                valeurImageBruitée = BruitageGaussAdditf(l,h)
+                print("snr image bruitée")
+                print(calcul_Snr(valeurImageSnr,valeurImageBruitée,l,h))
+                image= Image.fromarray(valeurImageBruitée)
+                image.show()
+                valeurImageBruitée=Debruitage_Convolution(l,h)
+                print("snr après convolution")
+                print(calcul_Snr(valeurImageSnr,valeurImageBruitée,l,h))
+                valeurImageBruitée=debruitage_Median(l,h)
+                print("snr après médian")
+                print(calcul_Snr(valeurImageSnr,valeurImageBruitée,l,h))
+            elif c=="3":
+                valeurImageBruitée = BruitageGaussMulti(l,h)
+                print("snr image bruitée")
+                print(calcul_Snr(valeurImageSnr,valeurImageBruitée,l,h))
+                image= Image.fromarray(valeurImageBruitée)
+                image.show()
+                valeurImageBruitée=Debruitage_Convolution(l,h)
+                print("snr après convolution")
+                print(calcul_Snr(valeurImageSnr,valeurImageBruitée,l,h))
+                valeurImageBruitée=debruitage_Median(l,h)
+                print("snr après médian")
+                print(calcul_Snr(valeurImageSnr,valeurImageBruitée,l,h))
