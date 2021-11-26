@@ -132,11 +132,12 @@ def calcul_Snr(valeurImageSnr,valeurImageBruitée,l,h):
             pBruittmp=float(valeurImageBruitée[i][j])-float(valeurImageSnr[i][j])
             pBruit+=float(pBruittmp**2)
 
-    print("pSignal = ",pSignal)
-    print("pBruit = ",pBruit)
-    print("pSignal-pBruit = ",pSignal - pBruit)
+    # print("pSignal = ",pSignal)
+    # print("pBruit = ",pBruit)
+    # print("pSignal-pBruit = ",pSignal - pBruit)
     snr = float(10*np.log10(pSignal/abs(pBruit)))
-    print("Le SNR est :",snr)
+    return snr
+
 l,h = image.size
 
 
@@ -213,45 +214,41 @@ while True :
         valeurImageBruitée=np.asarray(image2)
         calcul_Snr(valeurImageSnr,valeurImageBruitée,l,h)
 
-   
-
-
-
     elif(c=="9"):
             c=input("quel est le bruitage souhaité : \n 1 = Poivre et sel \n 2 = Additif \n 3 = Muliplicatif\n")
             if c=="1" :   
                 valeurImageBruitée = Bruitage_poivre_et_sel(l,h)
-                print("snr image bruitée")
+                print("snr image bruitée :")
                 print(calcul_Snr(valeurImageSnr,valeurImageBruitée,l,h))
                 image= Image.fromarray(valeurImageBruitée)
                 image.show()
                 valeurImageBruitée=Debruitage_Convolution(l,h)
-                print("snr après convolution")
+                print("snr après convolution :")
                 print(calcul_Snr(valeurImageSnr,valeurImageBruitée,l,h))
                 valeurImageBruitée=debruitage_Median(l,h)
-                print("snr après médian")
+                print("snr après médian :")
                 print(calcul_Snr(valeurImageSnr,valeurImageBruitée,l,h))
             elif c=="2":
                 valeurImageBruitée = BruitageGaussAdditf(l,h)
-                print("snr image bruitée")
+                print("snr image bruitée :")
                 print(calcul_Snr(valeurImageSnr,valeurImageBruitée,l,h))
                 image= Image.fromarray(valeurImageBruitée)
                 image.show()
                 valeurImageBruitée=Debruitage_Convolution(l,h)
-                print("snr après convolution")
+                print("snr après convolution :")
                 print(calcul_Snr(valeurImageSnr,valeurImageBruitée,l,h))
                 valeurImageBruitée=debruitage_Median(l,h)
-                print("snr après médian")
+                print("snr après médian :")
                 print(calcul_Snr(valeurImageSnr,valeurImageBruitée,l,h))
             elif c=="3":
                 valeurImageBruitée = BruitageGaussMulti(l,h)
-                print("snr image bruitée")
+                print("snr image bruitée :")
                 print(calcul_Snr(valeurImageSnr,valeurImageBruitée,l,h))
                 image= Image.fromarray(valeurImageBruitée)
                 image.show()
                 valeurImageBruitée=Debruitage_Convolution(l,h)
-                print("snr après convolution")
+                print("snr après convolution :")
                 print(calcul_Snr(valeurImageSnr,valeurImageBruitée,l,h))
                 valeurImageBruitée=debruitage_Median(l,h)
-                print("snr après médian")
+                print("snr après médian :")
                 print(calcul_Snr(valeurImageSnr,valeurImageBruitée,l,h))
